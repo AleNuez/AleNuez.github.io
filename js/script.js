@@ -1,21 +1,37 @@
 var veces = 0;
-
 var desaprobado = "btn btn-secondary";
+var aprobado = document.getElementsByClassName("btn btn-success");
 
-
+$(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip(); 
+  });
+ 
 function prender(mat)
 {
     if (mat.className == "btn btn-secondary")
     {
+        
         mat.className = "btn btn-success";
     } else if(mat.className == "btn btn-success")
         {
+            
             mat.className = "btn btn-secondary";
         }
+       
 }
+function chckaprobado(years)
+ {   
+    if (aprobado.length == 23)
+    {
+        $("#Modal").modal();
+        $(".modal-body").append(years);
+
+    } 
+ }
 
 function chckprimero()
 {
+    chckaprobado();
     var boton = document.getElementById("chckprimero");
     var inglesuno = document.getElementById("ingi");
     var prgi = document.getElementById("prgi");
@@ -473,6 +489,8 @@ if (sisi.className == "tercero" && sisi.firstChild.className == desaprobado)
 }
 function chcktercero()
 {
+    var years = " 3 años.";
+    chckaprobado(years);
     var boton = document.getElementById("chcktercero");
     var inglesuno = document.getElementById("ingi");
     var prgi = document.getElementById("prgi");
@@ -724,6 +742,8 @@ if (sisi.className == "quinto" && sisi.firstChild.className == desaprobado)
 }
 function chckcuarto()
 {
+    var years = " 4 años.";
+    chckaprobado(years);
     var boton = document.getElementById("chckcuarto");
     var inglesuno = document.getElementById("ingi");
     var prgi = document.getElementById("prgi");
@@ -878,6 +898,8 @@ function chckcuarto()
 }
 function chckquinto()
 {
+    var years = " 5 años.";
+    chckaprobado(years);
     var boton = document.getElementById("chckquinto");
     var inglesuno = document.getElementById("ingi");
     var prgi = document.getElementById("prgi");
@@ -1028,6 +1050,13 @@ function chckquinto()
         espaciosexto.appendChild(ediii);
         ediii.className = "sexto";
     }
+}
+function chcksexto()
+{
+    var years = " 6 años o más..";
+    chckaprobado(years);
+    var boton = document.getElementById("chcksexto");  
+    boton.firstChild.style = "color:green";
 }
 
 
