@@ -1,24 +1,28 @@
 var veces = 0;
 var desaprobado = "btn btn-secondary";
 var aprobado = document.getElementsByClassName("btn btn-success");
-
-$(document).ready(function(){
-    $('[data-toggle="tooltip"]').tooltip(); 
-  });
- 
+var progreso = 0;
 function prender(mat)
 {
+    
     if (mat.className == "btn btn-secondary")
     {
-        
+        progreso = ((progreso*10) + (4.35*10)) / 10;
         mat.className = "btn btn-success";
     } else if(mat.className == "btn btn-success")
         {
-            
+            progreso  = ((progreso*10) - (4.35*10)) / 10;
             mat.className = "btn btn-secondary";
         }
-       
+       var barra =  document.getElementById("progress-bar");
+        barra.style = "width:"+progreso+"%";
+         mostrarProgreso();
+      
 }
+function mostrarProgreso() {
+    document.getElementById("demo").innerHTML = progreso+"%";
+  }
+                                 
 function chckaprobado(years)
  {   
     if (aprobado.length == 23)
