@@ -8,119 +8,57 @@
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/all.css">
     <script src="js/all.js"></script>
-    <script src="js/script.js"></script>
+    
+    <script src="./js/moment.js"></script>
+    <script src="./js/moment-precise-range.js"></script>
     <icon src="icon.png" />
     <title>Bienvenido</title>
 </head>
 <body>
-        <nav class="navbar navbar-expand-md bg-dark navbar-dark">
-                <!-- Brand -->
-                <a class="navbar-brand" href="#">Planificador de Carrera</a>
-              
-                <!-- Toggler/collapsibe Button -->
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
-                  <span class="navbar-toggler-icon"></span>
-                </button>
-              
-                <!-- Navbar links -->
-                <div class="collapse navbar-collapse" id="collapsibleNavbar">
-                  <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <button type="button" onclick="window.location.reload()" class="btn btn-default" style="color: white"><span href="#" class="fas fa-redo"></span> Recargar</button>
-                    </li>
-                    <li class="nav-item">
-                        <a href="./index.html"><button type="button" class="btn btn-default" style="color: white"><span href="./index.html" class="fas fa-home"></span> Home</button></a>
-                         
-                    </li>
-                  </ul>
-                </div>
-              </nav>
     <header>
-            <h2>Analisis de Sistemas</h2>
+            <h2>Contador de dias</h2>
     </header>
-    <div class="container">
-        <div class="jumbotron">
-                <h3 class="display-4">¿En cuánto me recibo?</h3>
-                 <p class="lead"> Esta herramienta te ayuda a prestar especial atención a esas materias que si se recursan
-              , pueden llegar a ser un gran dolor de cabeza arrastrando muchas correlativas hacia años posteriores 
-                  </p>
-          <div class="d-flex justify-content-center">
-                <div class="card-columns text-center">
-                        <div class="card">
-                                <div class="card-header"><span class="fas fa-arrow-alt-circle-right fa-5x"></span></div>
-                                <div class="card-body"><p class="lead"> Visualiza tu plan de carrera</p></div>
-                                <div class="card-footer"><a href="app.html" class="btn btn-outline-dark btn-lg stretched-link">Comenzar</a></div>
-                              </div>
-                              <div class="card">
-                                <div class="card-header"><span class="fas fa-address-card fa-5x"></span></div>
-                                <div class="card-body"><p class="lead">Crea tu cuenta y guarda tus planes</p></div>
-                                <div class="card-footer">    <!-- Button to Open the Modal -->
-                                  <button type="button" class="btn btn-outline-dark btn-lg stretched-link" data-toggle="modal" data-target="#ModalReg">
-                                    Registro
-                                  </button>
-                                </div>
-                              </div>
-                              <div class="card">
-                                    <div class="card-header "><span class="fas fa-info-circle fa-5x"></span></div>
-                                    <div class="card-body"><p class="lead">Informacion acerca de la App</p></div>
-                                    <div class="card-footer"> <a href="about.html" class="btn btn-outline-dark btn-lg stretched-link">Acerca De</a></div>
-                              </div>
-                                 
-                      
-                </div> 
-          </div>
-                
+    
+    <div class="container" id="clock">
+      <div class="jumbotron text-center">
         
+  <div class="row">
+    <div class="col" id="light-box1"> 
+      <div class="col"><p>Nos conocimos hace:</p></div>
+        <div class="row">
+          <div class="col">
+              <div class="numero"><p class="box" id="years">-</p><p >Años</p></div>  
+          </div>
+          <div class="col">
+              <div class="numero"><p  class="box" id="months">-</p><p>Meses</p></div>  
+          </div>
+          <div class="col">
+              <div class="numero"><p class="box"  id="days">-</p><p>Dias</p></div>
+         </div>
         </div>
-    </div>
-
-
-<!-- The Modal -->
-<div class="modal" id="ModalReg">
-  <div class="modal-dialog">
-    <div class="modal-content">
-
-      <!-- Modal Header -->
-      <div class="modal-header">
-        <h4 class="modal-title">Registro</h4>
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
       </div>
-
-      <!-- Modal body -->
-      <div class="modal-body">
-          <div class="container">
-              <h2>Nuevo Usuario</h2>
-              <form action="/action_page.php">
-                <div class="form-group">
-                  <label for="form-name" >Nombre:</label>
-                  <input type="text" class="form-control" id="form-name" placeholder="Ingrese nombre:" name="form-name">
-                </div>
-                <div class="form-group">
-                  <label for="pwd">Password:</label>
-                  <input type="password" class="form-control" id="pwd" placeholder="Enter password" name="pswd">
-                </div>
-                <div class="form-group form-check">
-                  <label class="form-check-label">
-                    <input class="form-check-input" type="checkbox" name="remember"> Remember me
-                  </label>
-                </div>
-                <button type="submit" class="btn btn-primary">Enviar</button>
-              </form>
+      <div class="w-100"></div> <!-- Esto hace un salto de linea-->
+      <div class="col" id="light-box2"> 
+          <div class="col"><p>Somos novios hace:</p></div>
+            <div class="row">
+              <div class="col">
+                  <div class="numero"><p class="box"  id="yearsnov">-</p><p >Años</p></div>
+              </div>
+              <div class="col">
+                  <div class="numero"><p class="box"  id="monthsnov">-</p><p>Meses</p></div>
+              </div>
+              <div class="col">
+                  <div class="numero"><p  class="box" id="daysnov">-</p><p>Dias</p></div>
+             </div>
             </div>
-      </div>
-
-      <!-- Modal footer -->
-      <div class="modal-footer">
-        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-      </div>
-
-    </div>
+          </div>
+  
+  
   </div>
-</div>
 
 
 
-
+  <script src="js/script.js"></script>
     <script src="js/jquery.js"></script>
     <script src="js/bootstrap.min.js"></script>
 </body>
