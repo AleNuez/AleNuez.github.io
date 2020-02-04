@@ -1,0 +1,19 @@
+User-agent: *
+Disallow: /css
+Disallow: /*?
+Disallow: /*=
+Disallow: /ru/nasha-missiya/our-projects/pochemu-deti-boyatsya-hodit-v-shkolnyj-tualet
+
+User-Agent:Yandex
+Disallow: /*?
+Disallow: /*=
+Disallow: /*&
+Disallow: /ru/nasha-missiya/our-projects/pochemu-deti-boyatsya-hodit-v-shkolnyj-tualet
+Host: https://alenuez.github.io
+
+User-Agent:Googlebot
+Disallow: /css
+Disallow: /*?
+Disallow: /*=
+Disallow: /*&
+Disallow: /ru/nasha-missiya/our-projects/pochemu-deti-boyatsya-hodit-v-shkolnyj-tualet
