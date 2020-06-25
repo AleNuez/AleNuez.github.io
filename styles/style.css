@@ -1,22 +1,58 @@
 
 body {
-    width: 99%;
-    height: 100vh;
+    
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     text-align: center;
-    display: flex;
     flex-direction: column;
 }
+.main-container {
+    background-color: rgb(237, 237, 237);
+    display: flex;
+}
 header {
-    flex: 1;
-    padding-top: 1rem;
-    padding-bottom: 1rem;
+    color: whitesmoke;
     background: linear-gradient(40deg, rgb(56, 96, 112),rgb(144, 171, 189));
 }
-.main-container {
+.botonera {
+    margin: 2rem;
+}
+.header-content {
     display: flex;
-    background-color: rgb(187, 182, 231);
-    flex: 5;
+    align-items: center;
+    justify-content: space-between;
+}
+.header-button {
+    padding: 2rem;
+    border-radius: 9px;
+}
+.header-img {
+    background-image: url("../img/hero-main.jpg");
+    padding: 1rem;
+    background-size: cover;
+}
+#header-home {
+    background-image: url("../img/home.png");
+    background-repeat: no-repeat;
+    background-size: 10rem 7rem;
+    background-position: -47px -24px ;
+}
+#header-back {
+    background-image: url("../img/back.png");
+    background-repeat: no-repeat;
+    background-size: 7rem 3rem;
+    background-position: -25px 7px ;
+}
+.h-link {
+    padding: 2rem;
+}
+
+.edi-button {
+    padding: 2rem 6rem;
+    background: none;
+    border: none;
+    color: white;
+    border-radius: 3px;
+    font-size: 1.6rem;
 }
 
 nav {
@@ -24,7 +60,6 @@ nav {
     color: cornsilk;
     padding: 1rem;
     padding: 2rem;
-    flex: 1;
 }
 li {
     list-style: none;
@@ -37,38 +72,56 @@ a {
     color: cornsilk;
     text-decoration: none;
 }
-.ejercicios a, .proyectos a {
+.edi-button {
+    padding: 2rem 6rem;
+    background: none;
+    border: none;
+    color: white;
+    border-radius: 3px;
+    font-size: 1.6rem;
+}
+.article-button {
+    font-size: 1.4rem;
+    padding: 2rem 6rem;
+    background: none;
+    border: none;
+    border-radius: 3px;
+}
+.ejercicios a, .proyectos a, .ejerciciosdos a, .ejphp a {
     color: black;
 }
 article{
     padding: 2rem;
-    flex: 3;
+    flex: 5;
+    flex-direction: row;
+  
 }
+
 .row {
-    display: flex;
+   display: flex;
     justify-content: center;
+    flex-direction: column;
 }
 .col1, .col2, .col3 {
     background-color: whitesmoke;
     border-radius: 10px;
-    width: 100px;
-    height: 100px;
     margin: 5px;
+    border: outset;
 }
 .proyectos p, .ejercicios p {
     margin-top: 2rem;
 }
-.proyectos, .ejercicios {
+.proyectos, .ejercicios, .ejerciciosdos {
     display: none;
 }
 .btn-ejercicios , .btn-proyectos {
     margin: 0;
-    padding: 1rem;
+    padding: 0.5rem;
 }
 .btn-ejercicios.active, .btn-proyectos.active {
     background-color: rgb(143, 143, 143);
- 
 }
+
 li:hover {
     background-color: rgb(112, 112, 112);
 }
@@ -79,4 +132,17 @@ footer {
     padding-top: 0.7rem;
     padding-bottom: 0.7rem;
     color: blanchedalmond;
+}
+
+@media (max-width: 800px )  {
+
+    .main-container {
+        flex-direction: column;
+    }
+}
+@media (min-width: 800px )  {
+
+    body {
+        height: 100vh;
+    }
 }
