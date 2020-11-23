@@ -3,89 +3,73 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./styles/style.css">
-    <title>EDI | 2do. Año | ISFT 177</title>
+    <link rel="stylesheet" href="./css/styles.css">
+    <script src="./js/moment.js"></script>
+    <script src="./js/moment-precise-range.js"></script>
+    <icon src="icon.png" />
+    <title>Contando los dias</title>
 </head>
 <body>
-<header>
-    <div class="header-img">
-    <div class="header-content">
-        <h1>Espacio de Definición II</h1>
+    <header id="header">
+        <div class="header-container"><h2 class="header-brand">¿Cuánto va? <button onclick="hideNav()" class="hamburger" id="header-button"><div onclick="beautyCross(this)" class="nav-open" id="header-menu"
+            ><div class="bar1"></div><div class="bar2"></div><div class="bar3"></div></div></button></h2>
+        </div>
+        </header>
+    <main>
+    <nav id="navbar">
+        <h2>Ver por acontencimiento</h2>
+        <form id="nav-list">
+            <div class="nav-content"><input checked onclick="showMeet('#meet-input','#meet-card')" id="meet-input" class="check-nav" type="checkbox" ></input><p>Nos conocimos</p></div><hr>
+            <div class="nav-content"><input checked onclick="showMeet('#novios-input','#novios-card')" id="novios-input" class="check-nav" type="checkbox"></input><p>Nos pusimos de novios</p></div><hr>
+            <div class="nav-content"><input checked onclick="showMeet('#marriage-input','#marriage-card')" id="marriage-input" class="check-nav" type="checkbox"></input><p>Nos casamos</p></div><hr><br>
+        </form>
+    </nav>
+    <div class="main-without-nav">
+    <article id="article">
+        <div class="card-deck">
+        <div id="meet-card" class="card">
+            <div class="meet-container center-container">
+                <h2>Nos conocemos hace</h2>
+                <div class="clock-container">
+                    <div class="meet-years"><p id="meet-years">-</p><p>Años</p></div>
+                    <div class="meet-months"><p id="meet-months">-</p><p>Meses</p></div>
+                    <div class="meet-days"><p id="meet-days">-</p><p>Dias</p></div>
+                </div>
+            </div>
+        </div>
+        <div id="novios-card" class="card">
+            <div class="novios-container center-container">
+                <h2>Somos novios hace</h2>
+                <div class="clock-container">
+                    <div class="novios-years"><p id="novios-years">-</p><p>Años</p></div>
+                    <div class="novios-months"><p id="novios-months">-</p><p>Meses</p></div>
+                    <div class="novios-days"><p id="novios-days">-</p><p>Dias</p></div>
+                </div>
+            </div>
+        </div>
+        <div id="marriage-card" class="card">
+            <div class="marriage-container center-container">
+                <h2>Nos casamos hace</h2>
+                <div class="clock-container">
+                    <div class="marriage-years"><p id="marriage-years">-</p><p>Años</p></div>
+                    <div class="marriage-months"><p id="marriage-months">-</p><p>Meses</p></div>
+                    <div class="marriage-days"><p id="marriage-days">-</p><p>Dias</p></div>
+                </div>
+            </div>
+        </div>
     </div>
-    </div>
-</header>
-<div class="main-container">
-<nav>
-    <ul>
-        <p><b>Contenido</b></p>
-        <hr>
-        <li class="btn-proyectos"><button class="edi-button" onclick="hideProyectos(divproyectos,divejercicios,divejerciciosdos, divejphp)">Proyecto</button></li>
-        <hr>
-        <li class="btn-ejercicios"><button  class="edi-button" onclick="hideEjercicios(divejercicios,divproyectos,divejerciciosdos,divejphp)">Bases HTML</button></li>
-        <hr>
-        <li class="btn-ejerciciosdos"><button  class="edi-button" onclick="hideEjerciciosdos(divejercicios,divproyectos,divejerciciosdos,divejphp)">Ej Formularios</button></li>
-        <hr>
-        <li class="btn-ejphp"><button  class="edi-button" onclick="hideEjphp(divejercicios,divproyectos,divejerciciosdos,divejphp)">Ej PHP</button></li>
-    </ul>
-    
-</nav>
+    </article>
+    <aside id="aside">
+        <h2>Fotos</h2>
+    </aside>
+    </div>    
+    </main>
+    <footer id="footer">
+        <h2><small></small></h2>
+        <small><p class="copyright">Alejandro Nuñez 2020 <br>
+        Aplicación sencilla.</p></small>
+    </footer>
 
-<article>
-    <div class="proyectos">
-        <h2>Proyecto</h2>
-        <div class="row">
-            <div class="col1"><button class="article-button"><a href="./docs/proyecto/consigna.html"><p>Consigna</p><small>dada por el profesor</small></a></button></div>
-            <div class="col2"><button class="article-button"><a href="./docs/proyecto/proyecto.html"><p>Proyecto</p><small>Contenido</small></a></button></div>
-            <div class="col3"><button class="article-button"><a href="./docs/proyecto/about.html"><p>Detalles</p><small>Acerca de</small></a></button></div>
-        </div>
-    </div>
-    <div class="ejercicios">
-        <h2>Primera Clase</h2>
-        <div class="row">
-            <div class="col1"><p><a href="./docs/ej1/actividad1.html">Actividad 1<br><small>Plantilla</small></a></p></div>
-            <div class="col2"><p><a href="./docs/ej1/actividad2.html">Actividad 2<br><small>Caracteres Especiales</small></a></p></div>
-            <div class="col3"><p><a href="./docs/ej1/actividad3.html">Actividad 3<br><small>Fuentes</small></a></p></div>
-        </div>
-        <div class="row">
-            <div class="col1"><p><a href="./docs/ej1/actividad4.html">Actividad 4<br><small>Bordes</small></a></p></div>
-            <div class="col2"><p><a href="./docs/ej1/actividad5.html">Actividad 5<br><small>Colores</small></a></p></div>
-            <div class="col3"><p><a href="./docs/ej1/actividad6.html">Actividad 6<br><small>Tablas</small></a></p></div>
-        </div>
-        <div class="row">
-            <div class="col1"><p><a href="./docs/ej1/actividad7.html">Actividad 7<br><small>Tablas II</small></a></p></div>
-            <div class="col2"><p><a href="./docs/ej1/actividad8.html">Actividad 8<br><small>Listas</small></a></p></div>
-            <div class="col3"><p><a href="./docs/ej1/actividad9.html">Actividad 9<br><small>Favicon</small></a></p></div>
-        </div>
-        <div class="row">
-            <div class="col1"><p><a href="./docs/ej1/actividad10.html">Actividad 10<br><small>Anclas</small></a></p></div>
-            <div class="col2"><p><a href="./docs/ej1/actividad11.html">Actividad 11<br><small>Enlaces</small></a></p></div>
-            <div class="col3"><p><a href="./docs/ej1/actividad12.html">Actividad 12<br><small>Videos</small></a></p></div>
-        </div>
-        <div class="row">
-            <div class="col1"><p><a href="./docs/ej1/actividad13.html">Actividad 13<br><small>Mapa de imgs</small></a></p></div>
-            <div class="col2"><p><a href="./docs/ej1/actividad14.html">Actividad 14<br><small>Frames</small></a></p></div>
-            <div class="col3"><p><a href="./docs/ej1/actividad15.html">Actividad 15<br><small>Iframes</small></a></p></div>
-        </div>
-    </div>
-    <div class="ejerciciosdos">
-        <h2>Segunda Clase</h2>
-        <div class="row">
-            <div class="col1"><button class="article-button"><a href="./docs/ej2/form1.html"><p>Formulario 1</p><small>Registro</small></a></button></div>
-            <div class="col2"><button class="article-button"><a href="./docs/ej2/form2.html"><p>Formulario 2</p><small>Reserva viaje</small></a></button></div>
-            <div class="col3"><button class="article-button"><a href="./docs/ej2/form3.html"><p>Formulario 3</p><small>Formulario libre</small></a></button></div>
-        </div>
-    </div>
-    <div class="ejphp">
-        <h2>Introducción a PHP</h2>
-        <div class="row">
-            <div class="col1"><button class="article-button"><a href="./docs/ejphp/ejerciciophp.html"><p>Ejercicio PHP</p><small>formulario tarjeta</small></a></button></div>
-        </div>
-    </div>
-</article>
-</div>
-<footer>
-    <p><small>2020 Hecho por Alejandro Nuñez</small></p>
-</footer>
-<script src="./scripts/script.js"></script>
+<script src="./js/script.js"></script>
 </body>
 </html>
