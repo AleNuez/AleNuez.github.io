@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Correlatividad de Materias Interactivo</title>
+    <!-- Incluyendo Tailwind CSS para un diseño moderno y responsive -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Estilo para scrollbar limpio */
+        .scrollbar-thin::-webkit-scrollbar {
+            width: 8px;
+        }
+        .scrollbar-thin::-webkit-scrollbar-thumb {
+            background-color: #cbd5e1; /* slate-300 */
+            border-radius: 4px;
+        }
+        .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+            background-color: #94a3b8; /* slate-400 */
+        }
+        /* Estilo para el modal de confirmación personalizado */
+        .custom-modal-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans min-h-screen p-4 sm:p-8">
+
+    <div class="w-full max-w-4xl mx-auto bg-white shadow-xl rounded-2xl p-4 sm:p-10"> <!-- Ajuste de p-4 para móvil -->
+        <header class="mb-6 sm:mb-8 border-b pb-4">
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-blue-800">
+                Plan de Estudios: Correlatividad Interactiva
+            </h1>
+            <p class="mt-2 text-gray-600 text-sm sm:text-base">
+                Marca las materias que has <span class="font-semibold text-green-600">aprobado</span> para habilitar las correlativas. Las materias disponibles se resaltarán.
+            </p>
+        </header>
+
+        <!-- Contenedor principal para la lista de materias -->
+        <div id="course-list" class="space-y-4 max-h-[70vh] overflow-y-auto scrollbar-thin">
+            <!-- Las materias se renderizarán aquí -->
+            <div class="text-center p-8 text-gray-400">Cargando materias...</div>
+        </div>
+
+        <footer class="mt-8 pt-4 border-t text-center text-sm text-gray-500">
+            <button onclick="showResetConfirmation()" class="text-blue-600 hover:text-blue-800 transition duration-150 ease-in-out font-medium underline">
+                Reiniciar Plan
+            </button>
+            <p class="mt-2">Datos extraídos del archivo CSV adjunto para Fonoaudiología.</p>
+        </footer>
+    </div>
+    
+    <!-- Contenedor del Modal de Confirmación -->
+    <div id="reset-modal" class="hidden custom-modal-backdrop">
+        <div class="bg-white p-6 rounded-xl shadow-2xl max-w-sm w-full mx-4"> <!-- mx-4 para evitar pegarse a los bordes -->
+            <h3 class="text-xl font-bold text-red-600 mb-4">Confirmar Reinicio</h3>
+            <p class="text-gray-700 mb-6">¿Estás seguro de que quieres reiniciar el plan de estudios? Se borrarán todas las materias aprobadas.</p>
+            <div class="flex justify-end space-x-3">
+                <button onclick="hideResetConfirmation()" class="px-4 py-2 bg-gray-200 text-gray-800 font-semibold rounded-lg hover:bg-gray-300 transition">
+                    Cancelar
+                </button>
+                <button onclick="resetAppConfirmed()" class="px-4 py-2 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 transition">
+                    Reiniciar
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        // --- DATA SECTION ---
+        // Contenido del CSV adjunto, limpio y organizado por año/cuatrimestre.
+        const CSV_DATA = `
+CÓD.,ASIGNATURA,AÑO/CUATRIMESTRE,CORREL.
+1360,EPISTEMOLOGÍA Y LÓGICA,Primer Año / AN,
+1361,INTRODUCCIÓN A LA FONOAUDIOLOGÍA,Primer Año / AN,
+1362,PROBLEMÁTICA FILOSÓFICA,Primer Año / CU1,
+1363,FUNDAMENTOS DE PSICOLOGÍA I,Primer Año / CU1,
+1364,ANATOMÍA Y EMBRIOLOGÍA,Primer Año / CU1,
+1365,SEMIOLOGÍA,Primer Año / CU1,
+1366,ANATOMÍA Y FISIOLOGÍA DEL SISTEMA NERVIOSO,Primer Año / CU2,1364
+1367,FUNDAMENTOS DE PSICOLOGÍA II,Primer Año / CU2,1363
+1368,ESTADÍSTICA,Primer Año / CU2,
+1369,PRÁCTICA CLÍNICA I,Primer Año / CU2,
+1370,PSICOLOGÍA EVOLUTIVA,Segundo Año / AN,1367
+1371,METODOLOGÍA DE LA INVESTIGACIÓN,Segundo Año / AN,1360,1361
+1372,PSICOLINGÜÍSTICA Y LINGÜÍSTICA,Segundo Año / CU1,1367
+1373,FÍSICA ACÚSTICA,Segundo Año / CU1,1368
+1374,FISIOLOGÍA Y BIOFÍSICA,Segundo Año / CU1,1366
+1375,AUDICIÓN Y LENGUAJE,Segundo Año / CU1,1371,1372
+1376,FONÉTICA Y FONOLOGÍA,Segundo Año / CU2,1372
+1377,PSICOLOGÍA SOCIAL Y DE LA COMUNICACIÓN,Segundo Año / CU2,1370
+1378,AUDIOLOGÍA I,Segundo Año / CU2,1373
+1379,PATOLOGÍA DEL LENGUAJE,Segundo Año / CU2,1375
+1380,PRÁCTICA CLÍNICA II,Segundo Año / CU2,1369
+1381,NEUROFISIOLOGÍA,Tercer Año / CU1,1374
+1382,PATOLOGÍA DE LA DEGLUCIÓN,Tercer Año / CU1,1376
+1383,VOZ,Tercer Año / CU1,1371,1375
+1384,AUDIOLOGÍA II,Tercer Año / CU1,1378
+1385,PSICOMOTRICIDAD Y FONOAUDIOLOGÍA,Tercer Año / CU1,1375
+1386,PATOLOGÍA FONATORIA,Tercer Año / CU2,1375,1379
+1387,PATOLOGÍA AUDIOLÓGICA,Tercer Año / CU2,1384
+1388,PRÁCTICA CLÍNICA III,Tercer Año / CU2,1380
+1389,"PATOLOGÍA DEL HABLA, LENGUAJE Y COMUNICACIÓN EN EL NIÑO",Cuarto Año / AN,1386
+1390,AUDIOLOGÍA INFANTIL,Cuarto Año / CU1,1387
+1391,EVALUACIÓN DE LAS ALTERACIONES DE LA VOZ,Cuarto Año / CU1,1383,1386
+1392,PROMOCIÓN Y PREVENCIÓN EN AUDIOLOGÍA Y LENGUAJE,Cuarto Año / CU1,1387
+1393,EVALUACIÓN Y TERAPÉUTICA AUDIOLÓGICA,Cuarto Año / CU2,1390
+`;
+
+        let coursesData = {}; // Objeto para almacenar todas las materias por su código
+        const courseListContainer = document.getElementById('course-list');
+        const resetModal = document.getElementById('reset-modal');
+
+
+        // --- MODAL UTILS ---
+        function showResetConfirmation() {
+            resetModal.classList.remove('hidden');
+        }
+
+        function hideResetConfirmation() {
+            resetModal.classList.add('hidden');
+        }
+
+        function resetAppConfirmed() {
+            hideResetConfirmation();
+            resetApp();
+        }
+
+        // --- CSV PARSING AND DATA INITIALIZATION ---
+
+        // Función para parsear el CSV y estructurar los datos.
+        function initializeData() {
+            coursesData = {};
+            // Dividir las líneas, ignorando la primera (encabezado) y las vacías
+            const lines = CSV_DATA.trim().split('\n').slice(1);
+
+            lines.forEach(line => {
+                // Utilizar una regex simple para manejar comas dentro de comillas
+                const parts = line.match(/(".*?"|[^,]+)(?=\s*,|\s*$)/g);
+                
+                // Asegurar que haya al menos 3 partes (Código, Nombre, Año/Cuatrimestre)
+                if (!parts || parts.length < 3) return;
+
+                const code = parts[0].trim();
+                if (!code) return; // Chequeo de seguridad
+
+                const name = parts[1].trim().replace(/"/g, ''); // Limpiar comillas
+                const yearCuat = parts[2].trim();
+                
+                // Las correlativas son el resto de las partes. Si parts.length es 3, devuelve un array vacío.
+                const prereqStr = parts.slice(3).join(',');
+                
+                // Extraer solo los códigos numéricos, ignorando (R), (F), etc.
+                const prerequisites = prereqStr
+                    .split(',')
+                    .map(p => p.trim().match(/^\d+/))
+                    .filter(match => match)
+                    .map(match => match[0]);
+
+                if (code) {
+                    coursesData[code] = {
+                        code,
+                        name,
+                        yearCuat,
+                        prerequisites,
+                        isApproved: false,
+                        isAvailable: false,
+                        // Propiedad para agrupar en el renderizado
+                        group: yearCuat.split('/')[0].trim() 
+                    };
+                }
+            });
+            
+            loadState(); // Cargar estado guardado si existe
+            updateCorrelatives(); // Calcular el estado inicial de disponibilidad
+            renderCourses(); // Renderizar la interfaz
+        }
+
+        // --- CORE LOGIC ---
+
+        // Función principal para verificar la disponibilidad y actualizar la UI
+        function updateCorrelatives() {
+            let changesMade = true;
+            // Iterar hasta que no haya más cambios de disponibilidad
+            while (changesMade) {
+                changesMade = false;
+
+                Object.values(coursesData).forEach(course => {
+                    const oldAvailability = course.isAvailable;
+                    
+                    // Una materia está disponible si:
+                    // 1. No tiene prerrequisitos.
+                    const noPrereqs = course.prerequisites.length === 0;
+
+                    // 2. Todos sus prerrequisitos están aprobados por el usuario.
+                    const allPrereqsApproved = course.prerequisites.every(
+                        prereqCode => coursesData[prereqCode] && coursesData[prereqCode].isApproved
+                    );
+
+                    course.isAvailable = noPrereqs || allPrereqsApproved;
+
+                    if (oldAvailability !== course.isAvailable) {
+                        changesMade = true;
+                    }
+                });
+            }
+            
+            // Renderizar la UI después de calcular la disponibilidad
+            renderCourses();
+            saveState(); // Guardar el nuevo estado
+        }
+
+        // Maneja el clic en la casilla de aprobación
+        function handleApprovalToggle(code) {
+            const course = coursesData[code];
+            if (!course) return;
+
+            // Si se está marcando como aprobada, debe estar disponible.
+            // Esto previene que se marque una materia sin tener las correlativas.
+            if (!course.isApproved && !course.isAvailable) {
+                alertUser("No puedes aprobar " + course.name + " todavía. Primero debes aprobar las correlativas.");
+                // Retornar sin cambiar el estado del checkbox
+                document.getElementById(`checkbox-${code}`).checked = false;
+                return; 
+            }
+
+            course.isApproved = !course.isApproved;
+
+            // Si se desaprueba, hay que desaprobar automáticamente a las que dependen de ella
+            if (!course.isApproved) {
+                // Iterar sobre todas las materias para encontrar dependencias
+                Object.values(coursesData).forEach(otherCourse => {
+                    if (otherCourse.prerequisites.includes(code) && otherCourse.isApproved) {
+                        otherCourse.isApproved = false;
+                        // Forzar el desmarcado de la casilla dependiente
+                        const checkbox = document.getElementById(`checkbox-${otherCourse.code}`);
+                        if (checkbox) checkbox.checked = false;
+                    }
+                });
+            }
+
+            // Después de cualquier cambio, reevaluar todas las correlativas
+            updateCorrelatives();
+        }
+
+        // Función auxiliar para mostrar alertas sin usar window.alert
+        function alertUser(message) {
+            const alertBox = document.createElement('div');
+            alertBox.className = "fixed top-5 left-1/2 transform -translate-x-1/2 bg-red-500 text-white p-4 rounded-lg shadow-xl z-50 transition-opacity duration-300";
+            alertBox.textContent = message;
+            document.body.appendChild(alertBox);
+            setTimeout(() => {
+                alertBox.style.opacity = '0';
+                setTimeout(() => alertBox.remove(), 300);
+            }, 3000);
+        }
+
+        // --- UI RENDERING ---
+
+        function renderCourses() {
+            courseListContainer.innerHTML = '';
+            
+            // Agrupar materias por su propiedad 'group' (Año)
+            const groupedCourses = Object.values(coursesData).reduce((acc, course) => {
+                const group = course.group;
+                if (!acc[group]) {
+                    acc[group] = [];
+                }
+                acc[group].push(course);
+                return acc;
+            }, {});
+
+            // Ordenar los grupos (opcional, pero ayuda a la visualización)
+            const orderedGroups = Object.keys(groupedCourses).sort((a, b) => {
+                // Simple heurística de ordenamiento por el número del año
+                const numA = parseInt(a.match(/\d+/));
+                const numB = parseInt(b.match(/\d+/));
+                return numA - numB;
+            });
+
+            orderedGroups.forEach(groupName => {
+                const groupDiv = document.createElement('div');
+                groupDiv.className = "mb-6";
+                groupDiv.innerHTML = `<h2 class="text-lg sm:text-xl font-bold bg-blue-100 text-blue-800 p-3 rounded-t-xl sticky top-0 z-10">${groupName}</h2>`;
+                
+                const groupBody = document.createElement('div');
+                groupBody.className = "border border-t-0 border-blue-200 rounded-b-xl divide-y divide-blue-100";
+                
+                // Ordenar por código para mantener orden (o por cuatrimestre)
+                groupedCourses[groupName].sort((a, b) => parseInt(a.code) - parseInt(b.code)).forEach(course => {
+                    const isDisabled = !course.isAvailable && !course.isApproved;
+                    
+                    // Modificación CLAVE: flex-col en móvil, sm:flex-row en desktop/tablet
+                    let rowClasses = 'flex flex-col sm:flex-row sm:items-center sm:justify-between p-3 sm:p-4 transition duration-200 ease-in-out cursor-pointer';
+
+                    if (course.isApproved) {
+                        rowClasses += ' bg-green-50 text-green-800 hover:bg-green-100'; // Aprobada
+                    } else if (course.isAvailable) {
+                        rowClasses += ' bg-yellow-50 text-gray-800 hover:bg-yellow-100'; // Disponible (Prerequisitos cumplidos)
+                    } else if (isDisabled) {
+                        rowClasses += ' bg-gray-100 text-gray-400 opacity-70'; // Bloqueada
+                    } else {
+                        rowClasses += ' hover:bg-gray-100'; // Estado normal
+                    }
+                    
+                    // Mostrar correlativas requeridas
+                    const prereqNames = course.prerequisites.map(code => {
+                        const prereq = coursesData[code];
+                        // Asegurarse de que la materia prerrequisito exista antes de acceder a sus propiedades
+                        if (!prereq) {
+                             // Si no existe, lo marcamos como error, ya que la materia principal no podrá ser aprobada
+                             return `<span class="whitespace-nowrap flex items-center gap-1">⚠️ Error: Código ${code} no válido</span>`;
+                        }
+                        const status = prereq.isApproved ? '✅' : '❌';
+                        return `<span class="whitespace-nowrap flex items-center gap-1">${status} ${prereq.name}</span>`;
+                    }).join('<br>');
+                    
+                    // Reducir padding de prerequisitos en móvil
+                    const prereqHtml = course.prerequisites.length > 0 
+                        ? `<div class="text-xs text-gray-500 mt-1 pl-4 sm:pl-6">Req.: ${prereqNames}</div>`
+                        : `<div class="text-xs text-gray-500 mt-1 pl-4 sm:pl-6">Sin prerrequisitos.</div>`;
+
+                    const courseHtml = `
+                        <label for="checkbox-${course.code}" class="${rowClasses}">
+                            <div class="flex-grow w-full"> <!-- w-full asegura que ocupe todo el ancho para el apilamiento -->
+                                <span class="font-semibold text-base sm:text-lg ${course.isApproved ? 'line-through' : ''}">
+                                    ${course.code} - ${course.name} 
+                                </span>
+                                ${course.prerequisites.length > 0 ? prereqHtml : ''}
+                            </div>
+                            <div class="flex-shrink-0 ml-0 sm:ml-4 mt-2 sm:mt-0 flex justify-end"> <!-- Alineación a la derecha en móvil y margen superior -->
+                                <input 
+                                    type="checkbox" 
+                                    id="checkbox-${course.code}" 
+                                    data-code="${course.code}"
+                                    ${course.isApproved ? 'checked' : ''}
+                                    ${isDisabled ? 'disabled' : ''}
+                                    onchange="handleApprovalToggle('${course.code}')"
+                                    class="h-6 w-6 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 transition duration-150 ease-in-out"
+                                >
+                            </div>
+                        </label>
+                    `;
+                    
+                    groupBody.insertAdjacentHTML('beforeend', courseHtml);
+                });
+
+                groupDiv.appendChild(groupBody);
+                courseListContainer.appendChild(groupDiv);
+            });
+        }
+
+        // --- PERSISTENCE AND RESET ---
+
+        // Guarda el estado de aprobación del usuario en localStorage
+        function saveState() {
+            const approvedCodes = Object.values(coursesData)
+                .filter(c => c.isApproved)
+                .map(c => c.code);
+            
+            try {
+                localStorage.setItem('approvedCourses', JSON.stringify(approvedCodes));
+            } catch (e) {
+                console.error("Error guardando en localStorage:", e);
+            }
+        }
+
+        // Carga el estado de aprobación del usuario desde localStorage
+        function loadState() {
+            try {
+                const savedApproved = JSON.parse(localStorage.getItem('approvedCourses'));
+                if (savedApproved && Array.isArray(savedApproved)) {
+                    savedApproved.forEach(code => {
+                        if (coursesData[code]) {
+                            coursesData[code].isApproved = true;
+                        }
+                    });
+                }
+            } catch (e) {
+                console.error("Error cargando de localStorage:", e);
+                localStorage.removeItem('approvedCourses'); // Limpiar datos corruptos
+            }
+        }
+
+        // Lógica de reinicio: borra el estado y recarga.
+        function resetApp() {
+            // 1. Borra el estado persistente
+            localStorage.removeItem('approvedCourses');
+            
+            // 2. Re-inicializa la estructura de datos interna (coursesData = {}
+            //    y recarga todos los cursos desde CSV como NO APROBADOS)
+            initializeData(); 
+        }
+
+        // Inicializar la aplicación al cargar la página
+        window.onload = initializeData;
+    </script>
+</body>
+</html>
